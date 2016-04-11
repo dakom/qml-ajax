@@ -1,2 +1,37 @@
-# qml-ajax
-demo code for doing ajax via qml
+# Qml-Ajax
+This is a fully-functioning demo project showing how to do ajax via qml, and also some minimal boilerplate for a larger project setup
+
+It uses the "echo" service at jsfiddle.net, though that can be configured in config.js
+
+# Why and How?
+The various examples I found online didn't do things in a production-capable way. Truthfully, the lack of documentation and examples for something so basic and awesome was shocking, so I decided to piece it together and keep it here. The code isn't commented (yet?) but it does answer the following gotchas which bit me at first:
+
+1. How to do threaded requests that don't block the UI (WorkerScript)
+2. How to access global vars from the WorkerScript js (don't - make calls from the main thread side and pass the data around)
+3. How to bubble up signals from anywhere to anywhere (don't - use callbacks in a common js library)
+4. How to handle multiple ajax requests (keep a hash map of existing requests, pass the id around for abort() etc.)
+5. How to organize views and helper qml so they can be both imported and loaded
+6. How to deal with requests that are relevant to both the worker thread and the main thread (maintain private info on each, referenced by the same id, and pass messages to trigger actions like delete/open/etc.)
+
+There's also some extra stuff like dealing with a "close" button in the middle of a request (pass a deleteService() callback to statusCallbackAfterClose()) and a couple other goodies
+
+The basic idea with the files are:
+
+* config.js is a global js library (I use module syntax just to keep it neat). Among other things it deals with:
+ * locale/status lookups
+ * xhr hashmap for callbacks
+ * callbacks for cross-boundry "signals" (i.e. to display status window on main.qml from some deeply nested qml, in this case basically start)
+ * common library for internal js calls
+* workers.js is a *totally blind* worker js file that maintains its own copy of the xhr hashmap for its own purposes (really just to abort), but basically is just glue to talk between the main thread and the remote server.
+* ServiceWorker.qml is the component used from the main thread side to speak to workers.js. It also does sanity checking on the service response and calls the appropriate callbacks (stored in the hashmap on config.js)
+* StatusDialog.qml for showing the response and close button. The close button will hideitself but also tell config.API that it's closed, so config.API can call the appropriate callback if one has been set
+* ColorButton is just eyecandy for making a nicer looking button with gradients
+* Start.qml is a main window view. In a larger project there would be many of these which can be swapped via config.API.loadView()
+* main.qml is the main qml... it holds the status window (and can therefore be launched from any view) and any other views
+
+# Caveats
+
+If you got this far, you might notice that there can be multiple requests happening, each with their own callbacks, but the "statusCallbackAfterClose()" callback which is triggered by the status window being closed will only call the most recent assignment. This is intentional, since it corresponds to the user experience of closing whatever the most recent request is. If that doesn't fit your use case, maybe consider adding a flag when creating a service to not assign it (rather than assigning it to null if it doesn't exist), or maybe check it against a list of ID's on the status window itself since it's a single component sitting on main.  
+
+Anyway, enjoy!
+-David
