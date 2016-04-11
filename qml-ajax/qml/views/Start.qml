@@ -38,11 +38,26 @@ Rectangle {
             onButtonClicked: {
                 services.callService(Config.API.SERVICES.ECHO, {
                                          json: JSON.stringify({
+                                                               myText: input.text + "2"
+                                                           })
+                                     }, { onSuccessCallback: gotMessageBack2
+                                     }
+                                         )
+
+                //notice what happens if you switch these around, the effects of closing are visually different
+                //statusCallbackAfterClose() is always the most recent one, corresponding to user experience of one window
+                //The way it is right now is correct, the second one corresponds to the version which shows the text visually
+                //Closing will still do the console.log (i.e. gotMessageBack2())
+
+                services.callService(Config.API.SERVICES.ECHO, {
+                                         json: JSON.stringify({
                                                                myText: input.text
                                                            })
                                      }, { onSuccessCallback: gotMessageBack
                                      }
                                          )
+
+
             }
         }
 
@@ -66,5 +81,9 @@ Rectangle {
 
     function gotMessageBack(retObj) {
         Config.API.showStatusCode("You said: " + retObj.myText);
+    }
+
+    function gotMessageBack2(retObj) {
+       console.log("Async test #2: " + retObj.myText);
     }
 }

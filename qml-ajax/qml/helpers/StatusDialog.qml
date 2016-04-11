@@ -50,7 +50,7 @@ Item {
             width: 270
             height: 70
             buttonColor: "red"
-            text: "STOP"
+            text: "CLOSE"
             fontSize: 24
 
             onButtonClicked: {
