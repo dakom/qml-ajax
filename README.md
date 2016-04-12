@@ -26,12 +26,12 @@ The basic idea with the files are:
 * ServiceWorker.qml is the component used from the main thread side to speak to workers.js. Right now it's only to call ajax services, though that could be expanded to other types of workers. It also does sanity checking on the service response and calls the appropriate callbacks (stored in the map on api.js)
 * StatusDialog.qml for showing the response and close button. The close button will hideitself but also tell js Main api that it's closed, so js Main api can call the appropriate callback if one has been set
 * ColorButton is just eyecandy for making a nicer looking button with gradients
-* Start.qml is a main window view. In a larger project there would be many of these which can be swapped via config.Main.loadView()
+* Start.qml is a main window view. In a larger project there would be many of these which can be swapped via api.Main.loadView()
 * main.qml is the main qml... it holds the status window (and can therefore be launched from any view) and any other views
 
 # Caveats
 
-If you got this far, you might notice that there can be multiple requests happening, each with their own callbacks, but the "statusCallbackAfterClose()" callback which is triggered by the status window being closed will only call the most recent assignment. This is intentional, since it corresponds to the user experience of closing whatever the most recent request is. If that doesn't fit your use case, maybe consider checking it against a list of ID's on the status window itself since it's a single component sitting on main.  
+If you got this far, you might notice that there are multiple requests happening, each with their own callbacks, but the "statusCallbackAfterClose()" callback which is triggered by the status window being closed will only call the most recent assignment. This is intentional, since it corresponds to the user experience of closing whatever the most recent request is. If that doesn't fit your use case, maybe consider checking it against a list of ID's on the status window itself since it's a single component sitting on main.  
 
 Anyway, enjoy!
 -David
