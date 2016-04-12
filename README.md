@@ -31,7 +31,7 @@ The basic idea with the files are:
 
 # Caveats
 
-If you got this far, you might notice that there can be multiple requests happening, each with their own callbacks, but the "statusCallbackAfterClose()" callback which is triggered by the status window being closed will only call the most recent assignment. This is intentional, since it corresponds to the user experience of closing whatever the most recent request is. If that doesn't fit your use case, maybe consider adding a flag when creating a service to not assign it (rather than assigning it to null if it doesn't exist), or maybe check it against a list of ID's on the status window itself since it's a single component sitting on main.  
+If you got this far, you might notice that there can be multiple requests happening, each with their own callbacks, but the "statusCallbackAfterClose()" callback which is triggered by the status window being closed will only call the most recent assignment. This is intentional, since it corresponds to the user experience of closing whatever the most recent request is. If that doesn't fit your use case, maybe consider checking it against a list of ID's on the status window itself since it's a single component sitting on main.  
 
 Anyway, enjoy!
 -David
