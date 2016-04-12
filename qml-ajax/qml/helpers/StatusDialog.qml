@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import "qrc:/js/config.js" as Config
+import "qrc:/js/api.js" as JSAPI
 
 Item {
     id: root
@@ -9,13 +9,13 @@ Item {
     state: "Hidden"
 
     function showStatusCode(code) {
-        textField.text = Config.API.getStringFromStatusCode(code)
+        textField.text = JSAPI.Locale.getStringFromStatusCode(code)
         root.state = "Visible"
     }
 
     function showWait() {
-        textField.text = Config.API.getStringFromStatusCode(
-                    Config.API.STATUS_CODE.WAIT)
+        textField.text = JSAPI.Locale.getStringFromStatusCode(
+                    JSAPI.Globals.STATUS_CODES.WAIT)
         root.state = "Visible"
     }
 
@@ -56,7 +56,7 @@ Item {
             onButtonClicked: {
                 root.state = "Hidden"
                 root.closed
-                Config.API.statusCallbackAfterClose()
+                JSAPI.Main.statusCallbackAfterClose()
             }
         }
     }

@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.5
 import "qml/helpers"
-import "qrc:/js/config.js" as Config
+import "qrc:/js/api.js" as JSAPI
 
 Window {
     id: root
@@ -12,7 +12,7 @@ Window {
     visible: true
 
     Component.onCompleted: {
-        Config.API.init({
+        JSAPI.Main.init({
                             loadView: root.loadView,
                             showStatusWait: statusDialog.showWait,
                             showStatusCode: statusDialog.showStatusCode

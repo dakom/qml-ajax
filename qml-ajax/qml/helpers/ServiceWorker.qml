@@ -1,26 +1,23 @@
 import QtQuick 2.0
-import "qrc:/js/config.js" as Config
+import "qrc:/js/api.js" as JSAPI
 
 Item {
     id: root
-    property string hostname: Config.API.getHostname();
-
-
 
     function callService(serviceURI, dataObj, callbacks, preventWaitWindow) {
 
-        var serviceID = Config.API.createServiceInstance(callbacks);
+        var serviceID = JSAPI.Services.createServiceInstance(callbacks);
 
         worker.sendMessage({
                                typ: "service",
                                serviceID: serviceID,
-                               url: root.hostname + serviceURI,
+                               url: JSAPI.Globals.SERVICE_HOSTNAME + serviceURI,
                                dataObj: dataObj,
-                               jwt: Config.API.getJwt()
+                               jwt: JSAPI.Services.loginJwt
                            })
 
         if(!preventWaitWindow) {
-            Config.API.showStatusWait(function() {
+            JSAPI.Main.showStatusWait(function() {
                 root.destroyService(serviceID);
             });
         }
@@ -32,7 +29,7 @@ Item {
 
     function destroyService(serviceID) {
 
-        Config.API.deleteServiceInstance(serviceID);
+        JSAPI.Services.deleteServiceInstance(serviceID);
         worker.sendMessage({
                                typ: "destroy_service",
                                serviceID: serviceID,
@@ -47,7 +44,7 @@ Item {
 
             if (msg.typ == "service") {
                 var serviceID = msg.serviceID;
-                var serviceInstance = Config.API.getServiceInstance(serviceID);
+                var serviceInstance = JSAPI.Services.getServiceInstance(serviceID);
 
                 if(!serviceInstance) {
                     console.log("service instance not found (hopefully you aborted it!): #" + serviceID);
@@ -56,22 +53,20 @@ Item {
 
                 var retObj = msg.retObj
 
-                console.log(retObj);
-
                 if (retObj == null) {
                     if(serviceInstance.onFailFundamentalCallback !== null) {
                      serviceInstance.onFailFundamentalCallback();
                     } else {
-                        Config.API.showStatusCode(Config.API.STATUS_CODE.LOST_INTERNET);
+                        JSAPI.Main.showStatusCode(JSAPI.Gobals.STATUS_CODES.LOST_INTERNET);
                     }
                 } else if (!retObj.hasOwnProperty("myText")) {
                     //Theoretically we could parse different types of error returns here...
-                    var failCode = retObj.hasOwnProperty("code") ? retObj.code : Config.API.STATUS_CODE.LOST_INTERNET;
+                    var failCode = retObj.hasOwnProperty("code") ? retObj.code : JSAPI.Globals.STATUS_CODES.LOST_INTERNET;
 
                     if (serviceInstance.onFailStatusCallback !== undefined) {
                         serviceInstance.onFailStatusCallback(failCode, retObj)
                     } else {
-                        Config.API.showStatusCode(failCode)
+                        JSAPI.Main.showStatusCode(failCode)
                     }
                 } else {
                     serviceInstance.onSuccessCallback(retObj)

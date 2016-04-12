@@ -4,7 +4,7 @@
         <file>qml/helpers/ColorButton.qml</file>
         <file>qml/helpers/ServiceWorker.qml</file>
         <file>qml/views/Start.qml</file>
-        <file>js/config.js</file>
+        <file>js/api.js</file>
         <file>js/workers.js</file>
         <file>qml/helpers/StatusDialog.qml</file>
     </qresource>

@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 1.5
 import QtQuick.Controls.Styles 1.4
 import "../helpers"
-import "qrc:/js/config.js" as Config
+import "qrc:/js/api.js" as JSAPI
 
 Rectangle {
     id: root
@@ -15,7 +15,7 @@ Rectangle {
     }
 
     ServiceWorker {
-        id: services
+        id: serviceWorker
     }
 
     Rectangle {
@@ -36,7 +36,7 @@ Rectangle {
             fontSize: 24
 
             onButtonClicked: {
-                services.callService(Config.API.SERVICES.ECHO, {
+                serviceWorker.callService(JSAPI.Globals.SERVICE_ENDPOINTS.ECHO, {
                                          json: JSON.stringify({
                                                                myText: input.text + "2"
                                                            })
@@ -49,7 +49,7 @@ Rectangle {
                 //The way it is right now is correct, the second one corresponds to the version which shows the text visually
                 //Closing will still do the console.log (i.e. gotMessageBack2())
 
-                services.callService(Config.API.SERVICES.ECHO, {
+                serviceWorker.callService(JSAPI.Globals.SERVICE_ENDPOINTS.ECHO, {
                                          json: JSON.stringify({
                                                                myText: input.text
                                                            })
@@ -80,7 +80,7 @@ Rectangle {
     }
 
     function gotMessageBack(retObj) {
-        Config.API.showStatusCode("You said: " + retObj.myText);
+        JSAPI.Main.showStatusCode("You said: " + retObj.myText);
     }
 
     function gotMessageBack2(retObj) {
