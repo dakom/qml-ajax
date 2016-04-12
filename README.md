@@ -19,7 +19,7 @@ The basic idea with the files are:
 
 * config.js is a global js library (I use module syntax just to keep it neat). Among other things it deals with:
  * locale/status lookups
- * xhr hashmap for callbacks
+ * main thread service map
  * callbacks for cross-boundry "signals" (i.e. to display status window on main.qml from some deeply nested qml, in this case basically start)
  * common library for internal js calls
 * workers.js is a *totally blind* worker js file that maintains its own copy of the xhr map for its own purposes (really just to abort), but basically is just glue to talk between the main thread and the remote server.
