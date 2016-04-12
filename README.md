@@ -4,7 +4,7 @@ This is a fully-functioning demo project showing how to do ajax via qml, and als
 It uses the "echo" service at jsfiddle.net, though that can be configured in config.js
 
 # Why and How?
-The various examples I found online didn't do things in a production-capable way, so I decided to put something together and keep it here. The code isn't commented (yet?) but it does answer the following gotchas which bit me at first:
+The various examples I found online didn't do things in a truly production-ready way, and coherent community support on this as a complete solution is kinda hard to come by- so I decided to put something together and keep it here. The code isn't commented (yet?) but it does answer the following gotchas which bit me at first (and are basic necessities for a production-ready larger services-based app):
 
 1. How to do threaded requests that don't block the UI (WorkerScript)
 2. How to access global vars from the WorkerScript js (don't - make calls from the main thread side and pass the data around)
