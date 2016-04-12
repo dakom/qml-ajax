@@ -13,7 +13,7 @@ The various examples I found online didn't do things in a production-capable way
 5. How to organize views and helper qml so they can be both imported and loaded
 6. How to deal with requests that are relevant to both the worker thread and the main thread (maintain private info on each, referenced by the same id, and pass messages to trigger actions like delete/open/etc.)
 
-There's also some extra stuff like dealing with a "close" action in the middle of a request (pass a deleteService() callback to statusCallbackAfterClose()) and a couple other goodies
+There's also some extra stuff like dealing with a "close" action in the middle of a request (pass a deleteService() callback to statusCallbackAfterClose()), knowing when the qml has loaded not just from its own perspective but from the loader (evidently those are different), and a couple other goodies
 
 The basic idea with the files are:
 
